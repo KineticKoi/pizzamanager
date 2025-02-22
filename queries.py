@@ -25,7 +25,7 @@ def get_topping(topping_id):
     return "SELECT * FROM toppings WHERE id = %s", (topping_id,)
 
 def create_topping(topping):
-    return "INSERT INTO toppings (name, price) VALUES (%s, %s)", (topping['name'], topping['price'])
+    return "INSERT INTO toppings (name, price) VALUES (%s, %s) RETURNING id", (topping['name'], topping['price'])
 
 def update_topping(topping_id, topping):
     return "UPDATE toppings SET name = %s, price = %s WHERE id = %s", (topping['name'], topping['price'], topping_id)

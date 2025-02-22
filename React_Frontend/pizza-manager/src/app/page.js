@@ -3,11 +3,121 @@
 import { useState, useEffect, use } from 'react';
 
 export default function Home() {
+    /////////////////////////// TOPPINGS FUNCTIONS ///////////////////////////
+    const [editingToppingIndex, setEditingToppingIndex] = useState(null); //EDITING INDEX STATE (THIS IS THE INDEX OF THE TOPPING BEING EDITED)
+    const [editedTopping, setEditedTopping] = useState({}); //EDITED TOPPING STATE (THIS IS THE TOPPING BEING EDITED)
+    const [newTopping, setNewTopping] = useState(null); //NEW TOPPING STATE (THIS IS THE TOPPING BEING CREATED)
+    const [isNewTopping, setIsNewTopping] = useState(false); //BOOLEAN TO CHECK IF NEW TOPPING IS BEING CREATED
+    const handleCreateNewTopping = () => {
+        setNewTopping({
+            id: null,
+            name: "",
+            price: 0.00,
+        });
+        setIsNewTopping(true);
+    }
+
+    const handleSaveNewTopping = async () => {
+        try {
+            const response = await fetch(`${base_url}/create_topping`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    topping: newTopping,
+                }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                newTopping.id = data.id;
+                setToppings((prevToppings) => [...prevToppings, newTopping].sort((a, b) => a.id - b.id)); //WHEN NEW TOPPING IS ADDED, SORT TOPPINGS BY ID
+            } 
+            else {
+                console.error("Failed to create topping:", data.message || "Unknown error");
+            }
+        } 
+        catch (error) {
+            console.error("Error creating topping:", error);
+        }
+        setNewTopping(null);
+        setIsNewTopping(false);
+    };
+
+    const handleCancelNewTopping = () => {
+        setNewTopping(null);
+        setIsNewTopping(false);
+    }
+
+    const deleteTopping = async (topping) => {
+        try {
+            const response = await fetch(`${base_url}/delete_topping`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: topping.id }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                setToppings((prevToppings) => prevToppings.filter(t => t.id !== topping.id));
+            }
+            else {
+                console.error("Failed to delete topping:", data.message || "Unknown error");
+            }
+        }
+        catch (error) {
+            console.error("Error deleting topping:", error);
+        }
+    };
+
+    const handleToppingEdit = (topping, index) => {
+        setEditedTopping({ //SET THE EDITED TOPPING TO THE SELECTED TOPPING
+            id: topping.id,
+            name: topping.name,
+            price: topping.price,
+        });
+        setEditingToppingIndex(index);
+    };
+
+    const handleToppingSave = async () => {
+        try {
+            const response = await fetch(`${base_url}/update_topping`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: editedTopping.id,
+                    topping: {
+                        name: editedTopping.name,
+                        price: editedTopping.price,
+                    },
+                }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                setToppings((prevToppings) =>
+                    prevToppings.map((t, index) =>
+                        index === editingToppingIndex ? editedTopping : t
+                    )
+                );
+            }
+            else {
+                console.error("Failed to update topping:", data.message || "Unknown error");
+            }
+        }
+        catch (error) {
+            console.error("Error updating topping:", error);
+        }
+        setEditingToppingIndex(null);
+        setEditedTopping({});
+    };
+
+    /////////////////////////// PIZZA FUNCTIONS ///////////////////////////
+
     const [editingPizzaIndex, setPizzaEditingIndex] = useState(null); //EDITING INDEX STATE (THIS IS THE INDEX OF THE PIZZA BEING EDITED)
     const [editedPizza, setEditedPizza] = useState({}); //EDITED PIZZA STATE (THIS IS THE PIZZA BEING EDITED)
-
-    const [editingToppingIndex, setToppingEditingIndex] = useState(null); //EDITING INDEX STATE (THIS IS THE INDEX OF THE TOPPING BEING EDITED)
-    const [editedTopping, setEditedTopping] = useState({}); //EDITED TOPPING STATE (THIS IS THE TOPPING BEING EDITED)
 
     const handlePizzaEdit = (pizza, index) => {
         setEditedPizza({ //SET THE EDITED PIZZA TO THE SELECTED PIZZA
@@ -111,16 +221,10 @@ export default function Home() {
         setEditedPizza({});
     };
 
-
-    const [currentSection, setCurrentSection] = useState('view-pizzas'); 
     const [toppings, setToppings] = useState([]);
     const [pizzas, setPizzas] = useState([]);
     const [loading, setLoading] = useState(true);
     const base_url = 'http://localhost:5000';
-
-    const showSection = (section) => {
-        setCurrentSection(section);
-    }
 
     useEffect(() => {
         const getToppings = async () => {
@@ -266,168 +370,201 @@ export default function Home() {
                     )}
                 </header>
             </center>
-            {currentSection === 'view-pizzas' && (
-                <div id="view-pizzas" className="container">
+            <div id="view-pizzas" className="container">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h2>Pizzas</h2>
+                    <button className="sml-btn" onClick={handleCreateNewPizza}>
+                        <i className="bi bi-pencil"></i>
+                    </button>
+                </div>
+
+                {loading ? (
+                    <p>Loading pizzas...</p>
+                ) : (
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Toppings</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {isNewPizza && (
+                                <tr className="d-flex justify-content-between">
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={newPizza.name || ''}
+                                            onChange={(e) =>
+                                                setNewPizza({ ...newPizza, name: e.target.value })
+                                            }
+                                            placeholder="Pizza Name"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            name="price"
+                                            value={newPizza.price || ''}
+                                            onChange={(e) =>
+                                                setNewPizza({ ...newPizza, price: e.target.value })
+                                            }
+                                            placeholder="Price"
+                                        />
+                                    </td>
+                                    <td>
+                                        {toppings.map((topping) => (
+                                            <div key={topping.id} className="form-check">
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-check-input"
+                                                    name="toppings"
+                                                    value={topping.id}
+                                                    checked={newPizza.toppings.includes(topping.id)}
+                                                    onChange={(e) => handleChange(e, 'new')}
+                                                />
+                                                <label className="form-check-label">{topping.name}</label>
+                                            </div>
+                                        ))}
+                                    </td>
+                                    <td>
+                                        <button onClick={handleSaveNewPizza}>Save</button>
+                                        <button onClick={handleCancelNewPizza}>Cancel</button>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            )}
+                            {pizzas.map((pizza, index) => (
+                            <tr key={index} className="d-flex justify-content-between">
+                                <td>
+                                {editingPizzaIndex === index ? (
+                                    <input
+                                    type="text"
+                                    name="name"
+                                    value={editedPizza.name}
+                                    onChange={handleChange}
+                                    />
+                                ) : (
+                                    pizza.name
+                                )}
+                                </td>
+                                <td>
+                                {editingPizzaIndex === index ? (
+                                    <input
+                                    type="number"
+                                    name="price"
+                                    value={editedPizza.price}
+                                    onChange={handleChange}
+                                    />
+                                ) : (
+                                    `$${pizza.price}`
+                                )}
+                                </td>
+                                <td>
+                                    {editingPizzaIndex === index ? (
+                                        toppings.map((topping) => (
+                                            <div key={topping.id} className="form-check">
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-check-input"
+                                                    name="toppings"
+                                                    value={topping.id}
+                                                    checked={editedPizza.toppings.includes(topping.id)}
+                                                    onChange={handleChange}
+                                                />
+                                                <label className="form-check-label">{topping.name}</label>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        pizza.toppings.map((id) => {
+                                            const topping = toppings.find((topping) => topping.id === id);
+                                            return topping ? topping.name : 'Unregistered Topping';
+                                        }).join(', ')
+                                    )}
+                                </td>
+                                <td>
+                                {editingPizzaIndex === index ? (
+                                    <>
+                                    <button onClick={handlePizzaSave}>Save</button>
+                                    <button onClick={handlePizzaEditCancel}>Cancel</button>
+                                    </>
+                                ) : (
+                                    <button onClick={() => handlePizzaEdit(pizza, index)}>Edit</button>
+                                )}
+                                </td>
+                                <td>
+                                <button
+                                    onClick={() => {
+                                    if (window.confirm('Are you sure you want to delete this pizza?')) {
+                                        deletePizza(pizza);
+                                    }
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                                </td>
+                            </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
+            {userType === 'storeOwner' && (
+                <div id="update-toppings" className="container">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <h2>Pizzas</h2>
-                        <button className="sml-btn" onClick={handleCreateNewPizza}>
+                        <h2>Toppings</h2>
+                        <button className="sml-btn" onClick={handleCreateNewTopping}>
                             <i className="bi bi-pencil"></i>
                         </button>
                     </div>
 
                     {loading ? (
-                        <p>Loading pizzas...</p>
+                        <p>Loading toppings...</p>
                     ) : (
                         <table className="table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Price</th>
-                                    <th>Toppings</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {isNewPizza && (
+                                {/* Add New Topping Row */}
+                                {isNewTopping && (
                                     <tr className="d-flex justify-content-between">
                                         <td>
                                             <input
                                                 type="text"
                                                 name="name"
-                                                value={newPizza.name || ''}
-                                                onChange={(e) =>
-                                                    setNewPizza({ ...newPizza, name: e.target.value })
-                                                }
-                                                placeholder="Pizza Name"
+                                                value={newTopping.name || ''}
+                                                onChange={(e) => setNewTopping({ ...newTopping, name: e.target.value })}
+                                                placeholder="Topping Name"
                                             />
                                         </td>
                                         <td>
                                             <input
                                                 type="number"
                                                 name="price"
-                                                value={newPizza.price || ''}
-                                                onChange={(e) =>
-                                                    setNewPizza({ ...newPizza, price: e.target.value })
-                                                }
+                                                value={newTopping.price || ''}
+                                                onChange={(e) => setNewTopping({ ...newTopping, price: parseFloat(e.target.value) })}
                                                 placeholder="Price"
                                             />
                                         </td>
                                         <td>
-                                            {toppings.map((topping) => (
-                                                <div key={topping.id} className="form-check">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="form-check-input"
-                                                        name="toppings"
-                                                        value={topping.id}
-                                                        checked={newPizza.toppings.includes(topping.id)}
-                                                        onChange={(e) => handleChange(e, 'new')}
-                                                    />
-                                                    <label className="form-check-label">{topping.name}</label>
-                                                </div>
-                                            ))}
-                                        </td>
-                                        <td>
-                                            <button onClick={handleSaveNewPizza}>Save</button>
-                                            <button onClick={handleCancelNewPizza}>Cancel</button>
+                                            <button onClick={handleSaveNewTopping}>Save</button>
+                                            <button onClick={handleCancelNewTopping}>Cancel</button>
                                         </td>
                                         <td></td>
                                     </tr>
                                 )}
-                                {pizzas.map((pizza, index) => (
-                                <tr key={index} className="d-flex justify-content-between">
-                                    <td>
-                                    {editingPizzaIndex === index ? (
-                                        <input
-                                        type="text"
-                                        name="name"
-                                        value={editedPizza.name}
-                                        onChange={handleChange}
-                                        />
-                                    ) : (
-                                        pizza.name
-                                    )}
-                                    </td>
-                                    <td>
-                                    {editingPizzaIndex === index ? (
-                                        <input
-                                        type="number"
-                                        name="price"
-                                        value={editedPizza.price}
-                                        onChange={handleChange}
-                                        />
-                                    ) : (
-                                        `$${pizza.price}`
-                                    )}
-                                    </td>
-                                    <td>
-                                        {editingPizzaIndex === index ? (
-                                            toppings.map((topping) => (
-                                                <div key={topping.id} className="form-check">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="form-check-input"
-                                                        name="toppings"
-                                                        value={topping.id}
-                                                        checked={editedPizza.toppings.includes(topping.id)}
-                                                        onChange={handleChange}
-                                                    />
-                                                    <label className="form-check-label">{topping.name}</label>
-                                                </div>
-                                            ))
-                                        ) : (
-                                            pizza.toppings.map((id) => {
-                                                const topping = toppings.find((topping) => topping.id === id);
-                                                return topping ? topping.name : 'Unregistered Topping';
-                                            }).join(', ')
-                                        )}
-                                    </td>
-                                    <td>
-                                    {editingPizzaIndex === index ? (
-                                        <>
-                                        <button onClick={handlePizzaSave}>Save</button>
-                                        <button onClick={handlePizzaEditCancel}>Cancel</button>
-                                        </>
-                                    ) : (
-                                        <button onClick={() => handlePizzaEdit(pizza, index)}>Edit</button>
-                                    )}
-                                    </td>
-                                    <td>
-                                    <button
-                                        onClick={() => {
-                                        if (window.confirm('Are you sure you want to delete this pizza?')) {
-                                            deletePizza(pizza);
-                                        }
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
-                                    </td>
-                                </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
-            )}
-            {userType === 'storeOwner' && (
-                <div id="update-toppings" className="container">
-                    <h2>Toppings</h2>
-                    {loading ? (
-                        <p>Loading toppings...</p>
-                    ) : toppings.length === 0 ? (
-                        <center><p>No toppings available. Add some!</p></center>
-                    ) : (
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
+
+                                {/* Toppings List */}
                                 {toppings.map((topping, index) => (
                                     <tr key={index} className="d-flex justify-content-between">
                                         <td>
@@ -435,8 +572,8 @@ export default function Home() {
                                                 <input
                                                     type="text"
                                                     name="name"
-                                                    value={editedTopping.name}
-                                                    onChange={handleChange}
+                                                    value={editedTopping.name || ''}
+                                                    onChange={(e) => setEditedTopping({ ...editedTopping, name: e.target.value })}
                                                 />
                                             ) : (
                                                 topping.name
@@ -447,8 +584,8 @@ export default function Home() {
                                                 <input
                                                     type="number"
                                                     name="price"
-                                                    value={editedTopping.price}
-                                                    onChange={handleChange}
+                                                    value={editedTopping.price || ''}
+                                                    onChange={(e) => setEditedTopping({ ...editedTopping, price: parseFloat(e.target.value) })}
                                                 />
                                             ) : (
                                                 `$${topping.price}`
@@ -456,10 +593,24 @@ export default function Home() {
                                         </td>
                                         <td>
                                             {editingToppingIndex === index ? (
-                                                <button>Save</button>
+                                                <div>
+                                                    <button onClick={handleToppingSave}>Save</button>
+                                                    <button onClick={() => setEditingToppingIndex(null)}>Cancel</button>
+                                                </div>
                                             ) : (
-                                                <button>Edit</button>
+                                                <button onClick={() => handleToppingEdit(topping, index)}>Edit</button>
                                             )}
+                                        </td>
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    if (window.confirm('Are you sure you want to delete this topping?')) {
+                                                        deleteTopping(topping);
+                                                    }
+                                                }}
+                                            >
+                                                Delete
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -468,6 +619,7 @@ export default function Home() {
                     )}
                 </div>
             )}
+
         <footer>
             <p>&copy; 2025 Pizza Store Management</p>
         </footer>

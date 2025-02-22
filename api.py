@@ -55,14 +55,17 @@ def get_topping():
         return jsonify({"success": False, "error": str(e)})
 
 #CREATE TOPPING
-@app.route("/create_topping", methods=["GET"])
+@app.route("/create_topping", methods=["POST"])
 def create_topping():
     try:
         topping = request.json["topping"]
         if topping is None:
             return jsonify({"success": False, "error": "No topping provided"})
-        execute_query(queries.create_topping(topping = topping))
-        return jsonify({"success": True})
+        topping_id = execute_query(queries.create_topping(topping = topping))
+        if topping_id:
+            topping_id = topping_id[0][0]
+            return jsonify({"success": True, "id": topping_id})
+        return jsonify({"success": False, "error": "Error creating topping"})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
@@ -80,7 +83,7 @@ def update_topping():
         return jsonify({"success": False, "error": str(e)})
 
 #DELETE TOPPING
-@app.route("/delete_topping", methods=["GET"])
+@app.route("/delete_topping", methods=["DELETE"])
 def delete_topping():
     try:
         topping_id = request.json["id"]
