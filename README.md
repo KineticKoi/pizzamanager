@@ -14,6 +14,10 @@ This is a simple pizza manager application that allows users to create, read, up
 1. Run the following command to generate the database schema:
 ```python3 database_manager.py``` and follow the prompts.
 
+## Test the Database
+1. Run the following command to test the database:
+```python3 database_test_suite.py```
+
 ## Run the API
 1. Run the following command to start the API:
 ```python3 api.py```
