@@ -45,7 +45,7 @@ def create_topping():
     return jsonify({"success": True})
 
 #UPDATE TOPPING
-@app.route("/update_topping", methods=["GET"])
+@app.route("/update_topping", methods=["PUT"])
 def update_topping():
     topping_id = request.json["id"]
     topping = request.json["topping"]
@@ -93,7 +93,7 @@ def create_pizza():
     return jsonify({"success": True})
 
 #UPDATE PIZZA
-@app.route("/update_pizza", methods=["GET"])
+@app.route("/update_pizza", methods=["PUT"])
 def update_pizza():
     pizza_id = request.json["id"]
     pizza = request.json["pizza"]

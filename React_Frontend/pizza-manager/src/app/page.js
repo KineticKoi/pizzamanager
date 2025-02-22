@@ -3,7 +3,84 @@
 import { useState, useEffect, use } from 'react';
 
 export default function Home() {
-    const [currentSection, setCurrentSection] = useState('view-pizzas');
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [editedPizza, setEditedPizza] = useState({});
+
+    const handleEdit = (pizza, index) => {
+        setEditedPizza({ //SET THE EDITED PIZZA TO THE SELECTED PIZZA
+            id: pizza.id,
+            name: pizza.name,
+            price: pizza.price,
+            toppings: [...pizza.toppings],
+        });
+        setEditingIndex(index);
+    };
+
+    const handleChange = (e) => {
+        const { name, value, checked } = e.target;
+        let value_as_number = Number(value); //CONVERT STRING VALUE TO NUMBER (MUST BE DONE AS LIMITATION OF CHECKBOXES)
+
+        if (name === "toppings") {
+            let updatedToppings = [...editedPizza.toppings];
+            if (checked) {
+                updatedToppings.push(value_as_number); //ADD TOPPING IF CHECKED
+                updatedToppings.sort((a, b) => a - b); //SORT TOPPINGS (KEEPS ORDER CONSISTENT)
+            } 
+            else {
+                updatedToppings = updatedToppings.filter(id => id !== value_as_number); //REMOVE TOPPING IF UNCHECKED
+            }
+            setEditedPizza((prevPizza) => ({ //UPDATE THE EDITED PIZZA WITH THE NEW TOPPINGS
+                ...prevPizza,
+                [name]: updatedToppings,
+            }));
+        }
+    };
+    
+
+    const handleCancel = () => {
+        setEditingIndex(null);
+        setEditedPizza({});
+    };
+
+    //HANDLE SAVE FUNCTION (PUT REQUEST TO UPDATE PIZZA)
+    const handleSave = async () => {
+        try {
+            const response = await fetch(`${base_url}/update_pizza`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: editedPizza.id,
+                    pizza: {
+                        name: editedPizza.name,
+                        price: editedPizza.price,
+                        toppings: editedPizza.toppings,
+                    },
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setPizzas((prevPizzas) =>
+                    prevPizzas.map((p, index) =>
+                        index === editingIndex ? editedPizza : p
+                    )
+                );
+            } 
+            else {
+                console.error("Failed to update pizza:", data.message || "Unknown error");
+            }
+        } catch (error) {
+            console.error("Error updating pizza:", error);
+        }
+        setEditingIndex(null);
+        setEditedPizza({});
+    };
+
+
+    const [currentSection, setCurrentSection] = useState('view-pizzas'); 
     const [toppings, setToppings] = useState([]);
     const [pizzas, setPizzas] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -35,14 +112,6 @@ export default function Home() {
                 try {
                     const response = await fetch(`${base_url}/get_pizzas`);
                     const data = await response.json();
-                    
-                    for (let i = 0; i < data.pizzas.length; i++) {
-                        data.pizzas[i].toppings = data.pizzas[i].toppings.map(id => {
-                            const topping = toppings.find(topping => topping.id === id);
-                            return topping ? topping.name : 'Unregistered Topping';
-                        });
-                    }
-    
                     setPizzas(data.pizzas);
                     setLoading(false);
                 }
@@ -121,18 +190,75 @@ export default function Home() {
                             </thead>
                             <tbody>
                                 {pizzas.map((pizza, index) => (
-                                    <tr key={index} className = "d-flex justify-content-between">
-                                        <td>{pizza.name}</td>
-                                        <td>${pizza.price}</td>
-                                        <td>{pizza.toppings.join(', ')}</td>
-                                        <td><button>Edit</button></td>
-                                        <td><button onClick={() => {
-                                            if (window.confirm('Are you sure you want to delete this pizza?')) {
-                                                deletePizza(pizza);
-                                            }
+                                <tr key={index} className="d-flex justify-content-between">
+                                    <td>
+                                    {editingIndex === index ? (
+                                        <input
+                                        type="text"
+                                        name="name"
+                                        value={editedPizza.name}
+                                        onChange={handleChange}
+                                        />
+                                    ) : (
+                                        pizza.name
+                                    )}
+                                    </td>
+                                    <td>
+                                    {editingIndex === index ? (
+                                        <input
+                                        type="number"
+                                        name="price"
+                                        value={editedPizza.price}
+                                        onChange={handleChange}
+                                        />
+                                    ) : (
+                                        `$${pizza.price}`
+                                    )}
+                                    </td>
+                                    <td>
+                                        {editingIndex === index ? (
+                                            toppings.map((topping) => (
+                                                <div key={topping.id} className="form-check">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="form-check-input"
+                                                        name="toppings"
+                                                        value={topping.id}
+                                                        checked={editedPizza.toppings.includes(topping.id)}
+                                                        onChange={handleChange}
+                                                    />
+                                                    <label className="form-check-label">{topping.name}</label>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            pizza.toppings.map((id) => {
+                                                const topping = toppings.find((topping) => topping.id === id);
+                                                return topping ? topping.name : 'Unregistered Topping';
+                                            }).join(', ')
+                                        )}
+                                    </td>
+                                    <td>
+                                    {editingIndex === index ? (
+                                        <>
+                                        <button onClick={handleSave}>Save</button>
+                                        <button onClick={handleCancel}>Cancel</button>
+                                        </>
+                                    ) : (
+                                        <button onClick={() => handleEdit(pizza, index)}>Edit</button>
+                                    )}
+                                    </td>
+                                    <td>
+                                    <button
+                                        onClick={() => {
+                                        if (window.confirm('Are you sure you want to delete this pizza?')) {
+                                            deletePizza(pizza);
                                         }
-                                        }>Delete</button></td>
-                                    </tr>
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                    </td>
+                                </tr>
                                 ))}
                             </tbody>
                         </table>
