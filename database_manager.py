@@ -2,7 +2,9 @@
 #POSTGRESQL DATABASE MANAGER
 #This file contains the functions to manage the persistent database.
 import psycopg2
+import psycopg2.extras
 from databasedefinition import get_database_definition
+import queries
 
 ################################
 #GLOBAL VARIABLES
@@ -31,21 +33,31 @@ def get_database_connection(database_name: str):
 		print(f"Error connecting to database - {str(e)}")
 		return -1
 
-def execute_query(query: str, database_name: str = database_definition["database_name"]):
+def execute_query(query: str, database_name: str = "pizzamanager"):
     try:
         conn = get_database_connection(database_name)
         if conn is None:
             return
         conn.autocommit = True
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 
-        cursor.execute(query)
-
-        cursor.close()
-        conn.close()
+        if query.strip().upper().startswith("SELECT") or "RETURNING" in query.strip().upper():
+            cursor.execute(query)
+            results = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            return results
+        
+        else:
+            cursor.execute(query) 
+            cursor.close()
+            conn.close()
+            return None
 
     except psycopg2.Error as e:
         print(f"Error executing query: {str(e)}")
+        conn.rollback()
+        return None
 
 #CREATE DATABASE
 def create_database():
@@ -135,7 +147,7 @@ def build_postgresql():
 if __name__ == "__main__":
     print("Do you want to:")
     print("1. Build PostgreSQL database")
-    print("2. Clear PostgreSQL database")
+    print("2. Delete PostgreSQL database")
     print("3. Exit")
     choice = None
     while choice not in ["1", "2"]:
@@ -145,7 +157,7 @@ if __name__ == "__main__":
     elif choice == "2":
         choice = None
         while choice not in ["Y", "N", "y", "n"]:
-            choice = input("Are you sure you want to clear the database? (Y/N): ")
+            choice = input("Are you sure you want to delete the database? (Y/N): ")
             if choice == "Y" or choice == "y":
                 execute_query("DROP DATABASE pizzamanager", "postgres")
                 print("Database cleared.")

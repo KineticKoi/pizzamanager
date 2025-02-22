@@ -6,18 +6,18 @@ __database_definition = {
         "toppings": {
             "columns": {
                 "id": "SERIAL PRIMARY KEY",
-                "name": "VARCHAR(50)",
+                "name": "VARCHAR(50) UNIQUE NOT NULL",
                 "price": "DECIMAL(10,2)"
             }
         },
         "pizzas": {
             "columns": {
                 "id": "SERIAL PRIMARY KEY",
-                "name": "VARCHAR(50)",
+                "name": "VARCHAR(50) UNIQUE NOT NULL",
                 "price": "DECIMAL(10,2)",
                 "toppings": "INTEGER[]"
             }
-        }
+        },
     }
 }
 

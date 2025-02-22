@@ -9,7 +9,6 @@ body {
     max-width: 1200px;
     margin: 50px auto;
     padding: 20px;
-    text-align: center;
 }
 h1 {
     font-size: 2.5rem;
@@ -40,6 +39,16 @@ h1 {
 .btn:hover {
     background-color: #ff4d3d;
 }
+.sml-btn {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1rem;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
 .section-content {
     display: none;
     margin-top: 30px;
@@ -52,6 +61,47 @@ footer {
     margin-top: 50px;
     padding: 10px;
     text-align: center;
-    background-color: #343a40;
+    background-color: #333;
     color: white;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.table thead {
+    background-color: #333;
+    color: #fff;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.table th {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.table td {
+    font-size: 14px;
+}
+
+.table .toppings-column {
+    width: 40%;
+}
+
+.table .price-column {
+    width: 20%;
+}
+
+.table .name-column {
+    width: 40%;
 }
