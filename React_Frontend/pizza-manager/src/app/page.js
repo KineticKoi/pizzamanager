@@ -268,11 +268,15 @@ export default function Home() {
             </center>
             {currentSection === 'view-pizzas' && (
                 <div id="view-pizzas" className="container">
-                    <h2>Pizzas</h2>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h2>Pizzas</h2>
+                        <button className="sml-btn" onClick={handleCreateNewPizza}>
+                            <i className="bi bi-pencil"></i>
+                        </button>
+                    </div>
+
                     {loading ? (
                         <p>Loading pizzas...</p>
-                    ) : pizzas.length === 0 ? (
-                        <center><p>No pizzas available. Add some!</p></center>
                     ) : (
                         <table className="table">
                             <thead>
@@ -281,11 +285,7 @@ export default function Home() {
                                     <th>Price</th>
                                     <th>Toppings</th>
                                     <th></th>
-                                    <th style={{ textAlign: 'right' }}>
-                                        <button className="sml-btn" onClick={handleCreateNewPizza}>
-                                            <i className="bi bi-pencil"></i>
-                                        </button>
-                                    </th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
