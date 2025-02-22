@@ -33,8 +33,9 @@ def get_database_connection(database_name: str):
 		print(f"Error connecting to database - {str(e)}")
 		return -1
 
-def execute_query(query: str, database_name: str = "pizzamanager"):
+def execute_query(query_and_values: tuple = (), database_name: str = "pizzamanager"):
     try:
+        query, values = query_and_values
         conn = get_database_connection(database_name)
         if conn is None:
             return
@@ -42,14 +43,14 @@ def execute_query(query: str, database_name: str = "pizzamanager"):
         cursor = conn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 
         if query.strip().upper().startswith("SELECT") or "RETURNING" in query.strip().upper():
-            cursor.execute(query)
+            cursor.execute(query, values)
             results = cursor.fetchall()
             cursor.close()
             conn.close()
             return results
         
         else:
-            cursor.execute(query) 
+            cursor.execute(query, values)
             cursor.close()
             conn.close()
             return None
