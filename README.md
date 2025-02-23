@@ -20,7 +20,7 @@ Deployment of the frontend is still in progress.
 2. Install Python (backend) dependencies:
 ```pip3 install flask flask-cors waitress psycopg2-binary```
 3. Install Node.js (frontend) dependencies:
-```sudo yum install -y nodejs``` and ```npm install```
+```sudo yum install -y nodejs``` and ```npm install``` and ```npm install next```
 4. Install PostgreSQL:
 ```sudo dnf install postgresql15.x86_64 postgresql15-server -y```
 5. Initializa the PostgreSQL database:
