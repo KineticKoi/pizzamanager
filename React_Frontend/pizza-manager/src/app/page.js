@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function Home() {
     const devMode = false; //SET TO TRUE TO USE LOCALHOST, FALSE TO USE SERVER (THIS WOULD NORMALLY BE IN A .ENV FILE)
     const base_url = devMode ? 'http://localhost:5000' : 'http://3.149.249.254:5000'; //BASE URL FOR API (THESE WOULD NORMALLY BE IN A .ENV FILE)
+    const [loading, setLoading] = useState(true);
     const [userType, setUserType] = useState(null);
 
     const router = useRouter();
@@ -252,41 +253,38 @@ export default function Home() {
 
     const [toppings, setToppings] = useState([]);
     const [pizzas, setPizzas] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const getToppings = async () => {
-            try {
-                const response = await fetch(`${base_url}/get_toppings`);
-                const data = await response.json();
-                setToppings(data.toppings);
-                setLoading(false);
-            }
-            catch (error) {
-                console.error('Error fetching toppings:', error);
-                setLoading(false);
-            }
-        };
-        getToppings();
-    }, []);
+        if (userType) {
+            const getToppings = async () => {
+                try {
+                    const response = await fetch(`${base_url}/get_toppings`);
+                    const data = await response.json();
+                    setToppings(data.toppings);
+                }
+                catch (error) {
+                    console.error('Error fetching toppings:', error);
+                }
+            };
 
-    useEffect(() => {
-        if (toppings.length > 0) {
             const getPizzas = async () => {
                 try {
                     const response = await fetch(`${base_url}/get_pizzas`);
                     const data = await response.json();
                     setPizzas(data.pizzas);
-                    setLoading(false);
                 }
                 catch (error) {
                     console.error('Error fetching pizzas:', error);
+                }
+                finally {
                     setLoading(false);
                 }
             };
-            getPizzas();
+
+            //GET TOPPINGS AND PIZZAS IN ORDER TO RENDER THE PAGE
+            getToppings().finally(() => getPizzas());
         }
-    }, [toppings]);
+    }, [userType]);
 
     useEffect(() => {
         if (pizzas.length > 0 && toppings.length > 0) {
@@ -373,6 +371,10 @@ export default function Home() {
         localStorage.removeItem('userType');
         router.push('./login');
     };
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <div>

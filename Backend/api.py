@@ -21,7 +21,7 @@ def login():
         username = request.json["username"]
         password = request.json["password"]
         if username == "storeOwner" and password == "storeOwner":
-            return jsonify({"success": True, "userType": "admin"}), 200
+            return jsonify({"success": True, "userType": "storeOwner"}), 200
         elif username == "chef" and password == "chef":
             return jsonify({"success": True, "userType": "chef"}), 200
         return jsonify({"success": False, "error": "Invalid credentials"}), 401
