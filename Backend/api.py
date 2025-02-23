@@ -61,6 +61,12 @@ def create_topping():
         topping = request.json["topping"]
         if topping is None:
             return jsonify({"success": False, "error": "No topping provided"})
+        
+        #CHECK IF TOPPING ALREADY EXISTS
+        existing_topping = execute_query(queries.get_topping(topping_id = topping["name"]))
+        if existing_topping:
+            return jsonify({"success": False, "error": "topping already exists"})
+
         topping_id = execute_query(queries.create_topping(topping = topping))
         if topping_id:
             topping_id = topping_id[0][0]
@@ -127,6 +133,12 @@ def create_pizza():
         pizza = request.json["pizza"]
         if pizza is None:
             return jsonify({"success": False, "error": "No pizza provided"})
+        
+        #CHECK IF PIZZA ALREADY EXISTS
+        existing_pizza = execute_query(queries.get_pizza(pizza_id = pizza["name"]))
+        if existing_pizza:
+            return jsonify({"success": False, "error": "pizza already exists"})
+        
         pizza_id = execute_query(queries.create_pizza(pizza = pizza)) #GET NEWLY ASSIGNED ID
         if pizza_id:
             pizza_id = pizza_id[0][0]
