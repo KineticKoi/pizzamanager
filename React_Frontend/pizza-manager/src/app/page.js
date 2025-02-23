@@ -51,18 +51,18 @@ export default function Home() {
             if (data.success) {
                 newTopping.id = data.id;
                 setToppings((prevToppings) => [...prevToppings, newTopping].sort((a, b) => a.id - b.id)); //WHEN NEW TOPPING IS ADDED, SORT TOPPINGS BY ID
+                setNewTopping(null);
+                setIsNewTopping(false);
                 document.getElementById("message-toppings-text").innerText = "Topping created successfully.";
             } 
             else {
-                console.error("Failed to create topping:", data.message || "Unknown error");
-                document.getElementById("message-toppings-text").innerText = "Failed to create topping: " + (data.message || "Unknown error");
+                console.error("Failed to create topping:", data.error || "Unknown error");
+                document.getElementById("message-toppings-text").innerText = "Failed to create topping: " + (data.error || "Unknown error");
             }
         } 
         catch (error) {
             console.error("Error creating topping:", error);
         }
-        setNewTopping(null);
-        setIsNewTopping(false);
     };
 
     const handleCancelNewTopping = () => {
@@ -86,8 +86,8 @@ export default function Home() {
                 document.getElementById("message-toppings-text").innerText = "Topping deleted successfully.";
             }
             else {
-                console.error("Failed to delete topping:", data.message || "Unknown error");
-                document.getElementById("message-toppings-text").innerText = "Failed to delete topping: " + (data.message || "Unknown error");
+                console.error("Failed to delete topping:", data.error || "Unknown error");
+                document.getElementById("message-toppings-text").innerText = "Failed to delete topping: " + (data.error || "Unknown error");
             }
         }
         catch (error) {
@@ -129,8 +129,8 @@ export default function Home() {
                 );
             }
             else {
-                console.error("Failed to update topping:", data.message || "Unknown error");
-                document.getElementById("message-toppings-text").innerText = "Failed to update topping: " + (data.message || "Unknown error");
+                console.error("Failed to update topping:", data.error || "Unknown error");
+                document.getElementById("message-toppings-text").innerText = "Failed to update topping: " + (data.error || "Unknown error");
             }
         }
         catch (error) {
@@ -241,8 +241,8 @@ export default function Home() {
                 document.getElementById("message-pizzas-text").innerText = "Pizza updated successfully.";
             } 
             else {
-                console.error("Failed to update pizza:", data.message || "Unknown error");
-                document.getElementById("message-pizzas-text").innerText = "Failed to update pizza: " + (data.message || "Unknown error");
+                console.error("Failed to update pizza:", data.error || "Unknown error");
+                document.getElementById("message-pizzas-text").innerText = "Failed to update pizza: " + (data.error || "Unknown error");
             }
         } catch (error) {
             console.error("Error updating pizza:", error);
@@ -310,8 +310,8 @@ export default function Home() {
                 document.getElementById("message-pizzas-text").innerText = "Pizza deleted successfully.";
             } 
             else {
-                console.error("Failed to delete pizza:", data.message || "Unknown error");
-                document.getElementById("message-pizzas-text").innerText = "Failed to delete pizza: " + (data.message || "Unknown error");
+                console.error("Failed to delete pizza:", data.error || "Unknown error");
+                document.getElementById("message-pizzas-text").innerText = "Failed to delete pizza: " + (data.error || "Unknown error");
             }
         } catch (error) {
             console.error("Error deleting pizza:", error);
@@ -353,8 +353,8 @@ export default function Home() {
                 document.getElementById("message-pizzas-text").innerText = "Pizza created successfully.";
             } 
             else {
-                console.error("Failed to create pizza:", data.message || "Unknown error");
-                document.getElementById("message-pizzas-text").innerText = "Failed to create pizza: " + (data.message || "Unknown error");
+                console.error("Failed to create pizza:", data.error || "Unknown error");
+                document.getElementById("message-pizzas-text").innerText = "Failed to create pizza: " + (data.error || "Unknown error");
             }
         }
         catch (error) {

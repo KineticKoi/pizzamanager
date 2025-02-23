@@ -42,18 +42,6 @@ def get_toppings():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
-#GET TOPPING
-@app.route("/get_topping", methods=["GET"])
-def get_topping():
-    try:
-        topping_id = request.json["id"]
-        if topping_id is None:
-            return jsonify({"success": False, "error": "No topping id provided"})
-        topping = execute_query(queries.get_topping(topping_id = topping_id))
-        return jsonify({"success": True, "topping": {"id": topping[0], "name": topping[1], "price": topping[2]}})
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
-
 #CREATE TOPPING
 @app.route("/create_topping", methods=["POST"])
 def create_topping():
@@ -63,7 +51,7 @@ def create_topping():
             return jsonify({"success": False, "error": "No topping provided"})
         
         #CHECK IF TOPPING ALREADY EXISTS
-        existing_topping = execute_query(queries.get_topping(topping_id = topping["name"]))
+        existing_topping = execute_query(queries.get_topping_by_name(topping_name = topping["name"]))
         if existing_topping:
             return jsonify({"success": False, "error": "topping already exists"})
 
@@ -114,18 +102,6 @@ def get_pizzas():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
-#GET PIZZA
-@app.route("/get_pizza", methods=["GET"])
-def get_pizza():
-    try:
-        pizza_id = request.json["id"]
-        if pizza_id is None:
-            return jsonify({"success": False, "error": "No pizza id provided"})
-        pizza = execute_query(queries.get_pizza(pizza_id = pizza_id))
-        return jsonify({"success": True, "pizza": {"id": pizza[0], "name": pizza[1], "price": pizza[2], "toppings": pizza[3]}})
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
-
 #CREATE PIZZA
 @app.route("/create_pizza", methods=["POST"])
 def create_pizza():
@@ -135,7 +111,7 @@ def create_pizza():
             return jsonify({"success": False, "error": "No pizza provided"})
         
         #CHECK IF PIZZA ALREADY EXISTS
-        existing_pizza = execute_query(queries.get_pizza(pizza_id = pizza["name"]))
+        existing_pizza = execute_query(queries.get_pizza_by_name(pizza_name = pizza["name"]))
         if existing_pizza:
             return jsonify({"success": False, "error": "pizza already exists"})
         

@@ -9,6 +9,9 @@ def get_pizzas():
 def get_pizza(pizza_id):
     return "SELECT * FROM pizzas WHERE id = %s", (pizza_id,)
 
+def get_pizza_by_name(pizza_name):
+    return "SELECT * FROM pizzas WHERE name = %s", (pizza_name,)
+
 def create_pizza(pizza):
     return "INSERT INTO pizzas (name, price, toppings) VALUES (%s, %s, %s) RETURNING id", (pizza['name'], pizza['price'], pizza['toppings'])
 
@@ -23,6 +26,9 @@ def get_toppings():
 
 def get_topping(topping_id):
     return "SELECT * FROM toppings WHERE id = %s", (topping_id,)
+
+def get_topping_by_name(topping_name):
+    return "SELECT * FROM toppings WHERE name = %s", (topping_name,)
 
 def create_topping(topping):
     return "INSERT INTO toppings (name, price) VALUES (%s, %s) RETURNING id", (topping['name'], topping['price'])
