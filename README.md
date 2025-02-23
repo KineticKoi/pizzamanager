@@ -4,6 +4,10 @@
 - User username: storeOwner, password: storeOwner
 - User username: chef, password: chef
 
+This application is deployed on AWS EC2 and can be accessed at the following URL: http://3.149.249.254:3000
+The Flask API is running on port 5000 over http.
+Deployment of the frontend is still in progress.
+
 ## Description
 This is a simple pizza manager application that allows users to create, read, update, and delete pizza orders. The application is built using the following stack:
 - Frontend: React (Next.js)
@@ -14,10 +18,6 @@ This is a simple pizza manager application that allows users to create, read, up
 - Login as one of the following user types:
   - Store Owner: can create, read, update, and delete pizza toppings
   - Chef: can create, read, update, and delete pizzas
-
-This application is deployed on AWS EC2 and can be accessed at the following user and URL: ec2-user@18.119.126.34 using the private key (not provided here).
-The Flask API is running on port 5000 over https.
-Deployment of the frontend is still in progress.
 
 ## Local Setup
 1. Clone the repository:
@@ -65,6 +65,6 @@ NOTE: If you are running the API locally you may need to flip devMode flags to t
 ```Ctrl + A + D``` to detach from the screen session
 
 ## Usage
-1. Navigate to http://localhost:3000 in your browser to view the application.
+1. Navigate to http://localhost:3000 in your browser to view the application locally.
 
 More detailed instructions coming soon...
