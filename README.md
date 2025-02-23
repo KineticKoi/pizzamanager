@@ -1,5 +1,9 @@
 # pizzamanager
 
+## TESTER NOTES:
+- User username: storeOwner, password: storeOwner
+- User username: chef, password: chef
+
 ## Description
 This is a simple pizza manager application that allows users to create, read, update, and delete pizza orders. The application is built using the following stack:
 - Frontend: React (Next.js)
@@ -46,9 +50,11 @@ Deployment of the frontend is still in progress.
 ## Run the API
 1. Run the following command to start the API:
 ```cd pizzamanager/Backend```
-```nohup python3 api.py``` (this will run the API in the background)
+```nohup python3 api.py``` (this will run the API in the background. You will have to manually kill it if you want to stop it)
 
 ## Run the Frontend
+NOTE: If you are running the API locally you may need to flip devMode flags to true in the frontend code. They are located at the top of page.js files for each page.
+
 1. Run the following commands to start the frontend:
 ```cd pizzamanager/React_Frontend/pizza-manager```
 
