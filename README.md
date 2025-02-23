@@ -6,6 +6,11 @@ This is a simple pizza manager application that allows users to create, read, up
 - Backend: Flask (Python)
 - Database: PostgreSQL
 
+## Features
+- Login as one of the following user types:
+  - Store Owner: can create, read, update, and delete pizza toppings
+  - Chef: can create, read, update, and delete pizzas
+
 This application is deployed on AWS EC2 and can be accessed at the following user and URL: ec2-user@18.119.126.34 using the private key (not provided here).
 The Flask API is running on port 5000 over https.
 Deployment of the frontend is still in progress.
@@ -34,8 +39,8 @@ Deployment of the frontend is still in progress.
 1. Run the following command to generate the database schema:
 ```python3 database_manager.py``` and follow the prompts.
 
-## Test the Database
-1. Run the following command to test the database:
+## Test the Database (Unit Tests)
+1. Run the following command to test database_manager functionality after generating the schema:
 ```python3 database_test_suite.py```
 
 ## Run the API
