@@ -35,11 +35,11 @@ export default function Home() {
             if (data.success) {
                 newTopping.id = data.id;
                 setToppings((prevToppings) => [...prevToppings, newTopping].sort((a, b) => a.id - b.id)); //WHEN NEW TOPPING IS ADDED, SORT TOPPINGS BY ID
-                document.getElementById("message-text").innerText = "Topping created successfully.";
+                document.getElementById("message-toppings-text").innerText = "Topping created successfully.";
             } 
             else {
                 console.error("Failed to create topping:", data.message || "Unknown error");
-                document.getElementById("message-text").innerText = "Failed to create topping: " + (data.message || "Unknown error");
+                document.getElementById("message-toppings-text").innerText = "Failed to create topping: " + (data.message || "Unknown error");
             }
         } 
         catch (error) {
@@ -67,11 +67,11 @@ export default function Home() {
             const data = await response.json();
             if (data.success) {
                 setToppings((prevToppings) => prevToppings.filter(t => t.id !== topping.id));
-                document.getElementById("message-text").innerText = "Topping deleted successfully.";
+                document.getElementById("message-toppings-text").innerText = "Topping deleted successfully.";
             }
             else {
                 console.error("Failed to delete topping:", data.message || "Unknown error");
-                document.getElementById("message-text").innerText = "Failed to delete topping: " + (data.message || "Unknown error");
+                document.getElementById("message-toppings-text").innerText = "Failed to delete topping: " + (data.message || "Unknown error");
             }
         }
         catch (error) {
@@ -114,12 +114,12 @@ export default function Home() {
             }
             else {
                 console.error("Failed to update topping:", data.message || "Unknown error");
-                document.getElementById("message-text").innerText = "Failed to update topping: " + (data.message || "Unknown error");
+                document.getElementById("message-toppings-text").innerText = "Failed to update topping: " + (data.message || "Unknown error");
             }
         }
         catch (error) {
             console.error("Error updating topping:", error);
-            document.getElementById("message-text").innerText = "Error updating topping: " + error;
+            document.getElementById("message-toppings-text").innerText = "Error updating topping: " + error;
         }
         setEditingToppingIndex(null);
         setEditedTopping({});
@@ -222,11 +222,11 @@ export default function Home() {
                         index === editingPizzaIndex ? editedPizza : p
                     )
                 );
-                document.getElementById("message-text").innerText = "Pizza updated successfully.";
+                document.getElementById("message-pizzas-text").innerText = "Pizza updated successfully.";
             } 
             else {
                 console.error("Failed to update pizza:", data.message || "Unknown error");
-                document.getElementById("message-text").innerText = "Failed to update pizza: " + (data.message || "Unknown error");
+                document.getElementById("message-pizzas-text").innerText = "Failed to update pizza: " + (data.message || "Unknown error");
             }
         } catch (error) {
             console.error("Error updating pizza:", error);
@@ -318,11 +318,11 @@ export default function Home() {
     
             if (data.success) {
                 setPizzas((prevPizzas) => prevPizzas.filter(p => p.id !== pizza.id));
-                document.getElementById("message-text").innerText = "Pizza deleted successfully.";
+                document.getElementById("message-pizzas-text").innerText = "Pizza deleted successfully.";
             } 
             else {
                 console.error("Failed to delete pizza:", data.message || "Unknown error");
-                document.getElementById("message-text").innerText = "Failed to delete pizza: " + (data.message || "Unknown error");
+                document.getElementById("message-pizzas-text").innerText = "Failed to delete pizza: " + (data.message || "Unknown error");
             }
         } catch (error) {
             console.error("Error deleting pizza:", error);
@@ -361,11 +361,11 @@ export default function Home() {
                 setPizzas((prevPizzas) => [...prevPizzas, newPizza].sort((a, b) => a.id - b.id)); //WHEN NEW PIZZA IS ADDED, SORT PIZZAS BY ID
                 setIsNewPizza(false);
                 setNewPizza(null);
-                document.getElementById("message-text").innerText = "Pizza created successfully.";
+                document.getElementById("message-pizzas-text").innerText = "Pizza created successfully.";
             } 
             else {
                 console.error("Failed to create pizza:", data.message || "Unknown error");
-                document.getElementById("message-text").innerText = "Failed to create pizza: " + (data.message || "Unknown error");
+                document.getElementById("message-pizzas-text").innerText = "Failed to create pizza: " + (data.message || "Unknown error");
             }
         }
         catch (error) {
@@ -534,8 +534,8 @@ export default function Home() {
                 )}
             </div>
 
-            <div id="message" className="container">
-                <p id="message-text"></p>
+            <div id="message-pizzas" className="container">
+                <p id="message-pizzas-text"></p>
             </div>
 
             {userType === 'storeOwner' && (
@@ -644,7 +644,9 @@ export default function Home() {
                     )}
                 </div>
             )}
-
+        <div id="message-toppings" className="container">
+            <p id="message-toppings-text"></p>
+        </div>
         <footer>
             <p>&copy; 2025 Pizza Store Management</p>
         </footer>
