@@ -11,9 +11,22 @@ The Flask API is running on port 5000 over https.
 Deployment of the frontend is still in progress.
 
 ## Local Setup
-1. Clone the repository
+1. Clone the repository:
 2. Install Python (backend) dependencies:
 ```pip3 install flask flask-cors waitress psycopg2-binary```
+3. Install Node.js (frontend) dependencies:
+```sudo yum install -y nodejs``` and ```npm install```
+4. Install PostgreSQL:
+```sudo dnf install postgresql15.x86_64 postgresql15-server -y```
+5. Start the PostgreSQL service:
+```sudo systemctl start postgresql-15``` and ```sudo systemctl enable postgresql-15```
+6. Create a new database user:
+```sudo -u postgres createuser -s your_username```
+7. Create a new database:
+```sudo -u postgres createdb your_database_name```
+8. Update user credentials
+```sudo -u postgres psql -c "ALTER USER your_username WITH PASSWORD 'your_password';"```
+9. Update the database connection string in the database_manager.py file (would be better to use environment variables)
 
 ## Generate the Database Schema
 1. Run the following command to generate the database schema:
