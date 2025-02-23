@@ -4,7 +4,7 @@
 - User username: storeOwner, password: storeOwner
 - User username: chef, password: chef
 
-This application is deployed on AWS EC2 and can be accessed at the following URL: http://3.149.249.254:3000
+This application is deployed on AWS EC2
 The Flask API is running on port 5000 over http.
 Deployment of the frontend is still in progress.
 
