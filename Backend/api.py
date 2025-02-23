@@ -6,12 +6,6 @@ import queries
 app = Flask(__name__)
 CORS(app)
 
-@app.after_request
-def after_request(response):
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    return response
-
 ################
 # CONSTANTS
 ################
