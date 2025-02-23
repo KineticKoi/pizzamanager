@@ -1,0 +1,124 @@
+/* CSS for the chefportal home page */
+body {
+    background-color: #f4f4f9;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 40px;
+}
+.button-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.btn {
+    display: block;
+    width: 250px;
+    height: 120px;
+    background-color: #ff6f61;
+    color: white;
+    font-size: 1.3rem;
+    text-align: center;
+    line-height: 120px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.btn:hover {
+    background-color: #ff4d3d;
+}
+.sml-btn {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1rem;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+.section-content {
+    display: none;
+    margin-top: 30px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+footer {
+    margin-top: 50px;
+    padding: 10px;
+    text-align: center;
+    background-color: #333;
+    color: white;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.table thead {
+    background-color: #333;
+    color: #fff;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.table th {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.table td {
+    font-size: 14px;
+}
+
+.table .toppings-column {
+    width: 40%;
+}
+
+.table .price-column {
+    width: 20%;
+}
+
+.table .name-column {
+    width: 40%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+  
+.form-group label {
+    margin-right: 12px;
+}
+  
+.input-field {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
