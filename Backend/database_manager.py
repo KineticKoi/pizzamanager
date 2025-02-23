@@ -16,7 +16,7 @@ database_definition = get_database_definition()
 def get_database_connection(database_name: str):
 	#USER CREDENTIALS
 	user = {
-		"postgres": "postgres",
+		"username": "postgres",
 		"password": "password",
 	}
 	try:

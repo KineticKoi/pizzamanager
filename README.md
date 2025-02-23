@@ -6,9 +6,14 @@ This is a simple pizza manager application that allows users to create, read, up
 - Backend: Flask (Python)
 - Database: PostgreSQL
 
-## Setup
+This application is deployed on AWS EC2 and can be accessed at the following user and URL: ec2-user@18.119.126.34 using the private key (not provided here).
+The Flask API is running on port 5000 over https.
+Deployment of the frontend is still in progress.
+
+## Local Setup
 1. Clone the repository
-2. Install dependencies...
+2. Install Python (backend) dependencies:
+```pip3 install flask flask-cors waitress psycopg2-binary```
 
 ## Generate the Database Schema
 1. Run the following command to generate the database schema:
