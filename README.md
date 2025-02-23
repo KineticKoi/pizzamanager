@@ -18,6 +18,9 @@ This is a simple pizza manager application that allows users to create, read, up
 - Login as one of the following user types:
   - Store Owner: can create, read, update, and delete pizza toppings
   - Chef: can create, read, update, and delete pizzas
+  
+  -Duplicate entries are not allowed for toppings and pizzas. User feedback for this case is implemented.
+  -The application is responsive and can be used on many devices.
 
 ## Local Setup
 1. Clone the repository:
