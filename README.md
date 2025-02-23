@@ -18,6 +18,8 @@ Deployment of the frontend is still in progress.
 ```sudo yum install -y nodejs``` and ```npm install```
 4. Install PostgreSQL:
 ```sudo dnf install postgresql15.x86_64 postgresql15-server -y```
+5. Initializa the PostgreSQL database:
+```sudo postgresql-setup --initdb```
 5. Start the PostgreSQL service:
 ```sudo systemctl start postgresql-15``` and ```sudo systemctl enable postgresql-15```
 6. Create a new database user:
@@ -41,7 +43,11 @@ Deployment of the frontend is still in progress.
 ```python3 api.py```
 
 ## Run the Frontend
-1. Run the following command to start the frontend:
+1. Run the following commands to start the frontend:
+```cd pizzamanager/React_Frontend/pizza-manager```
+```npm install```
+```npm run build```
+```npm run start```
 ```npm run dev```
 
 ## Usage
