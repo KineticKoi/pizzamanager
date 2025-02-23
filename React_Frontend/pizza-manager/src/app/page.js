@@ -3,6 +3,8 @@
 import { useState, useEffect, use } from 'react';
 
 export default function Home() {
+    const base_url = 'http://localhost:5000';
+
     /////////////////////////// TOPPINGS FUNCTIONS ///////////////////////////
     const [editingToppingIndex, setEditingToppingIndex] = useState(null); //EDITING INDEX STATE (THIS IS THE INDEX OF THE TOPPING BEING EDITED)
     const [editedTopping, setEditedTopping] = useState({}); //EDITED TOPPING STATE (THIS IS THE TOPPING BEING EDITED)
@@ -23,6 +25,8 @@ export default function Home() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Origin': base_url,
                 },
                 body: JSON.stringify({
                     topping: newTopping,
@@ -55,6 +59,8 @@ export default function Home() {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': "application/json",
+                    'Origin': base_url,
                 },
                 body: JSON.stringify({ id: topping.id }),
             });
@@ -86,6 +92,8 @@ export default function Home() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Origin': base_url,
                 },
                 body: JSON.stringify({
                     id: editedTopping.id,
@@ -191,6 +199,8 @@ export default function Home() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Origin': base_url,
                 },
                 body: JSON.stringify({
                     id: editedPizza.id,
@@ -224,7 +234,6 @@ export default function Home() {
     const [toppings, setToppings] = useState([]);
     const [pizzas, setPizzas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const base_url = 'http://localhost:5000';
 
     useEffect(() => {
         const getToppings = async () => {
@@ -268,6 +277,8 @@ export default function Home() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Origin': base_url,
                     },
                     body: JSON.stringify({ username: 'admin', password: 'admin' }),
                 });
@@ -295,6 +306,8 @@ export default function Home() {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': "application/json",
+                    'Origin': base_url,
                 },
                 body: JSON.stringify({ id: pizza.id }),
             });
@@ -330,6 +343,8 @@ export default function Home() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Origin': base_url,
                 },
                 body: JSON.stringify({
                     pizza: newPizza,
