@@ -20,13 +20,13 @@ def login():
     try:
         username = request.json["username"]
         password = request.json["password"]
-        if username == "admin" and password == "admin":
-            return jsonify({"success": True, "userType": "storeOwner"})
-        elif username == "user" and password == "user":
-            return jsonify({"success": True, "userType": "chef"})
-        return jsonify({"success": False, "error": "Invalid credentials"})
+        if username == "storeOwner" and password == "storeOwner":
+            return jsonify({"success": True, "userType": "admin"}), 200
+        elif username == "chef" and password == "chef":
+            return jsonify({"success": True, "userType": "chef"}), 200
+        return jsonify({"success": False, "error": "Invalid credentials"}), 401
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
+        return jsonify({"success": False, "error": str(e)}), 500
 
 #GET TOPPINGS
 @app.route("/get_toppings", methods=["GET"])

@@ -1,4 +1,4 @@
-import '../../styles/home.css';
+import '../../styles/global.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export const metadata = {

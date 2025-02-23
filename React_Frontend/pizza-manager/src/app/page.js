@@ -1,10 +1,24 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-    const devMode = false; //SET TO TRUE TO USE LOCALHOST, FALSE TO USE SERVER
+    const devMode = false; //SET TO TRUE TO USE LOCALHOST, FALSE TO USE SERVER (THIS WOULD NORMALLY BE IN A .ENV FILE)
     const base_url = devMode ? 'http://localhost:5000' : 'http://3.149.249.254:5000'; //BASE URL FOR API (THESE WOULD NORMALLY BE IN A .ENV FILE)
+    const [userType, setUserType] = useState(null);
+
+    const router = useRouter();
+
+    useEffect(() => {
+        const isAuthenticated = localStorage.getItem('userType');
+        if (!isAuthenticated) {
+            router.push('./login');
+        }
+        else {
+            setUserType(localStorage.getItem('userType'));
+        }
+    }, [router]);
 
     /////////////////////////// TOPPINGS FUNCTIONS ///////////////////////////
     const [editingToppingIndex, setEditingToppingIndex] = useState(null); //EDITING INDEX STATE (THIS IS THE INDEX OF THE TOPPING BEING EDITED)
@@ -274,30 +288,6 @@ export default function Home() {
         }
     }, [toppings]);
 
-    const [userType, setUserType] = useState(null);
-    useEffect(() => {
-        const login = async () => {
-            try {
-                const response = await fetch(`${base_url}/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({ username: 'admin', password: 'admin' }),
-                });
-                const data = await response.json();
-                setUserType(data.userType);
-                console.log('Logged in as:', data.userType);
-            }
-            catch (error) {
-                console.error('Error logging in:', error);
-            }
-        };
-        login();
-    }, []);
-
-
     useEffect(() => {
         if (pizzas.length > 0 && toppings.length > 0) {
             setLoading(false);
@@ -379,17 +369,40 @@ export default function Home() {
         setIsNewPizza(false);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('userType');
+        router.push('./login');
+    };
+
     return (
         <div>
             <center>
-                <header>
-                    {userType === 'storeOwner' && (
-                        <h1>Store Owner Portal!</h1>
-                    )}
-                    {userType === 'chef' && (
-                        <h1>Chef Portal!</h1>
-                    )}
-                </header>
+            <header style={{
+                position: 'relative', 
+                textAlign: 'center', 
+                padding: '20px 0',
+                }}>
+                {/* Conditionally render header based on userType */}
+                {userType === 'storeOwner' && <h1>Store Owner Portal!</h1>}
+                {userType === 'chef' && <h1>Chef Portal!</h1>}
+
+                {/* Log Out Button with Absolute Positioning */}
+                {(userType === 'storeOwner' || userType === 'chef') && (
+                    <button className='sml-btn' 
+                    onClick={handleLogout} 
+                    style={{
+                        position: 'absolute',
+                        top: '20px',
+                        right: '20px',
+                        fontSize: '16px',
+                        cursor: 'pointer',
+                        width: '100px',
+                    }}
+                    >
+                    Log Out
+                    </button>
+                )}
+            </header>
             </center>
             <div id="view-pizzas" className="container">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
