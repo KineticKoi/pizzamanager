@@ -40,6 +40,7 @@ Deployment of the frontend is still in progress.
 
 ## Run the API
 1. Run the following command to start the API:
+```cd pizzamanager/Backend```
 ```python3 api.py```
 
 ## Run the Frontend
