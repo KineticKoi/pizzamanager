@@ -32,7 +32,7 @@ Deployment of the frontend is still in progress.
 7. Create a new database:
 ```sudo -u postgres createdb your_database_name```
 8. Update user credentials
-```sudo -u postgres psql -c "ALTER USER your_username WITH PASSWORD 'your_password';"```
+```sudo -u postgres psql -c "ALTER USER your_username WITH PASSWORD 'password';"``` (!IMPORTANT: use password 'password' for user postgres or update the database_manager.py file)
 9. Update the database connection string in the database_manager.py file (would be better to use environment variables)
 
 ## Generate the Database Schema
