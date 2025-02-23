@@ -46,15 +46,17 @@ Deployment of the frontend is still in progress.
 ## Run the API
 1. Run the following command to start the API:
 ```cd pizzamanager/Backend```
-```python3 api.py```
+```nohup python3 api.py``` (this will run the API in the background)
 
 ## Run the Frontend
 1. Run the following commands to start the frontend:
 ```cd pizzamanager/React_Frontend/pizza-manager```
+
+2. Run screen (if application is not containerized):
+```screen -S my-session```
 ```npm install```
-```npm run build```
-```npm run start```
-```npm run dev```
+```npm run build``` or ```npm run start``` or ```npm run dev```
+```Ctrl + A + D``` to detach from the screen session
 
 ## Usage
 1. Navigate to http://localhost:3000 in your browser to view the application.
