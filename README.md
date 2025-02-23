@@ -70,4 +70,32 @@ NOTE: If you are running the API locally you may need to flip devMode flags to t
 ## Usage
 1. Navigate to http://localhost:3000 in your browser to view the application locally.
 
-More detailed instructions coming soon...
+## Thought Process and Improvements
+For this app I thought it would be best to use technology that is "mainstream" and also tailored to what StrongMind looked for in their requirements. A typical full-stack would use a modern framework for the frontend (React, Angular, Vue), a backend that can handle requests and serve data (Flask, Django, Express), and a database to store data (PostgreSQL, MySQL, MongoDB). 
+
+I chose to use React for the frontend because it is the most popular framework that is easy to use and has a large community with resources. It is also simple to create mobile-friendly applications with React as well quickly test and deploy.
+
+I chose Flask for the backend because it is a lightweight framework that is easy to use and has a lot of built-in functionality. This also fits the "Python preferred" experience that StrongMind is seeking. I have a few years of experience in Flask and have used it in many projects so that helped save time.
+
+For the database, I chose PostgreSQL. It is a popular relational database that is easy to use and has a lot of built-in functionality. It also has an easy-to-use Python library for interactions that I have a lot of experience with. 
+
+As for deployment, I chose AWS (EC2 for persistence) since I have significant experience using it at Fox Corporation.
+
+My thought process and workflow started with designing the database schema and automating its creation in Python (this makes deployment easy later). I then created a simple SQL controller (wrapper for psycopg2) to interact with the database alongside a query wrapper library for CRUD functions. Next, I created a small test suite to test the database functionality. This marked the end of database development.
+
+Second, I created the API using Flask (this interacts with the SQL controller created previously).
+
+I then created the frontend using React and tested it using the browser and browser tools. Testing was very short since the backend was verified to be working (unit testing). I skipped creating a selenium test suite since the application is simple and I had limited time.
+
+I then deployed the application on AWS EC2 and tested it using the browser and browser tools.
+
+Documentation was created as I went along to make it easier for others to understand the code and how to run the application. Comments were also added throughout the code and the actual code was written in a way that is easy to read and understand.
+
+Some improvements that could be made to the application (if I continued developing) are:
+- Implementing a more secure login system (JWT, OAuth)
+- Environment variables for sensitive information
+- A more robust error handling system
+- A more robust testing suite
+- A more robust logging system
+- Data encryption for API requests
+- Coloring the UI to make it more visually appealing and accessible...
