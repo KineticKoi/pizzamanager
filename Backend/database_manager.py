@@ -14,7 +14,7 @@ database_definition = get_database_definition()
 #DATABASE SCHEMA MANAGEMENT
 ################################
 def get_database_connection(database_name: str):
-	#USER CREDENTIALS
+	#USER CREDENTIALS (THESE WOULD NORMALLY BE IN A .ENV FILE)
 	user = {
 		"username": "postgres",
 		"password": "password",
