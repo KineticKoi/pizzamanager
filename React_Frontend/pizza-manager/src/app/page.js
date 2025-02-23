@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from 'react';
 
 export default function Home() {
-    const base_url = 'http://3.149.249.254:5000';
+    const base_url = 'http://3.149.249.254:5000'; //BASE URL FOR API
 
     /////////////////////////// TOPPINGS FUNCTIONS ///////////////////////////
     const [editingToppingIndex, setEditingToppingIndex] = useState(null); //EDITING INDEX STATE (THIS IS THE INDEX OF THE TOPPING BEING EDITED)
@@ -413,50 +413,55 @@ export default function Home() {
                         </thead>
                         <tbody>
                             {isNewPizza && (
-                                <tr className="d-flex justify-content-between">
-                                    <td>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={newPizza.name || ''}
-                                            onChange={(e) =>
-                                                setNewPizza({ ...newPizza, name: e.target.value })
-                                            }
-                                            placeholder="Pizza Name"
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            name="price"
-                                            value={newPizza.price || ''}
-                                            onChange={(e) =>
-                                                setNewPizza({ ...newPizza, price: e.target.value })
-                                            }
-                                            placeholder="Price"
-                                        />
-                                    </td>
-                                    <td>
-                                        {toppings.map((topping) => (
-                                            <div key={topping.id} className="form-check">
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    name="toppings"
-                                                    value={topping.id}
-                                                    checked={newPizza.toppings.includes(topping.id)}
-                                                    onChange={(e) => handleChange(e, 'new')}
-                                                />
-                                                <label className="form-check-label">{topping.name}</label>
-                                            </div>
-                                        ))}
-                                    </td>
-                                    <td>
-                                        <button onClick={handleSaveNewPizza}>Save</button>
-                                        <button onClick={handleCancelNewPizza}>Cancel</button>
-                                    </td>
-                                    <td></td>
-                                </tr>
+                            <tr className="d-flex justify-content-between">
+                                <td>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={newPizza.name || ''}
+                                    onChange={(e) =>
+                                    setNewPizza({ ...newPizza, name: e.target.value })
+                                    }
+                                    placeholder="Pizza Name"
+                                />
+                                </td>
+                                <td>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    value={newPizza.price || ''}
+                                    onChange={(e) => {
+                                    const value = e.target.value;
+                                    const regex = /^\d+(\.\d{0,2})?$/; //REGEX TO ALLOW 2 DECIMAL PLACES
+                                    if (regex.test(value) || value === '') {
+                                        setNewPizza({ ...newPizza, price: value }); //UPDATE NEW PIZZA PRICE
+                                    }
+                                    }}
+                                    placeholder="Price"
+                                    step="0.01" //STEP TO ALLOW 2 DECIMAL PLACES
+                                />
+                                </td>
+                                <td>
+                                {toppings.map((topping) => (
+                                    <div key={topping.id} className="form-check">
+                                    <input
+                                        type="checkbox"
+                                        className="form-check-input"
+                                        name="toppings"
+                                        value={topping.id}
+                                        checked={newPizza.toppings.includes(topping.id)}
+                                        onChange={(e) => handleChange(e, 'new')}
+                                    />
+                                    <label className="form-check-label">{topping.name}</label>
+                                    </div>
+                                ))}
+                                </td>
+                                <td>
+                                <button onClick={handleSaveNewPizza}>Save</button>
+                                <button onClick={handleCancelNewPizza}>Cancel</button>
+                                </td>
+                                <td></td>
+                            </tr>
                             )}
                             {pizzas.map((pizza, index) => (
                             <tr key={index} className="d-flex justify-content-between">
@@ -477,34 +482,44 @@ export default function Home() {
                                     <input
                                     type="number"
                                     name="price"
-                                    value={editedPizza.price}
-                                    onChange={handleChange}
+                                    value={editedPizza.price || ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const regex = /^\d*\.?\d{0,2}$/; //REGEX TO ALLOW 2 DECIMAL PLACES
+                                        if (regex.test(value)) {
+                                        setEditedPizza({ ...editedPizza, price: value });
+                                        }
+                                    }}
+                                    placeholder="Price"
+                                    step="0.01" //STEP TO ALLOW 2 DECIMAL PLACES
                                     />
                                 ) : (
                                     `$${pizza.price}`
                                 )}
                                 </td>
                                 <td>
-                                    {editingPizzaIndex === index ? (
-                                        toppings.map((topping) => (
-                                            <div key={topping.id} className="form-check">
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    name="toppings"
-                                                    value={topping.id}
-                                                    checked={editedPizza.toppings.includes(topping.id)}
-                                                    onChange={handleChange}
-                                                />
-                                                <label className="form-check-label">{topping.name}</label>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        pizza.toppings.map((id) => {
-                                            const topping = toppings.find((topping) => topping.id === id);
-                                            return topping ? topping.name : 'Unregistered Topping';
-                                        }).join(', ')
-                                    )}
+                                {editingPizzaIndex === index ? (
+                                    toppings.map((topping) => (
+                                    <div key={topping.id} className="form-check">
+                                        <input
+                                        type="checkbox"
+                                        className="form-check-input"
+                                        name="toppings"
+                                        value={topping.id}
+                                        checked={editedPizza.toppings.includes(topping.id)}
+                                        onChange={handleChange}
+                                        />
+                                        <label className="form-check-label">{topping.name}</label>
+                                    </div>
+                                    ))
+                                ) : (
+                                    pizza.toppings
+                                    .map((id) => {
+                                        const topping = toppings.find((topping) => topping.id === id);
+                                        return topping ? topping.name : 'Unregistered Topping';
+                                    })
+                                    .join(', ')
+                                )}
                                 </td>
                                 <td>
                                 {editingPizzaIndex === index ? (
@@ -530,7 +545,7 @@ export default function Home() {
                             </tr>
                             ))}
                         </tbody>
-                    </table>
+                        </table>
                 )}
             </div>
 
@@ -562,82 +577,105 @@ export default function Home() {
                             <tbody>
                                 {/* Add New Topping Row */}
                                 {isNewTopping && (
-                                    <tr className="d-flex justify-content-between">
-                                        <td>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                value={newTopping.name || ''}
-                                                onChange={(e) => setNewTopping({ ...newTopping, name: e.target.value })}
-                                                placeholder="Topping Name"
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="number"
-                                                name="price"
-                                                value={newTopping.price || ''}
-                                                onChange={(e) => setNewTopping({ ...newTopping, price: parseFloat(e.target.value) })}
-                                                placeholder="Price"
-                                            />
-                                        </td>
-                                        <td>
-                                            <button onClick={handleSaveNewTopping}>Save</button>
-                                            <button onClick={handleCancelNewTopping}>Cancel</button>
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                <tr className="d-flex justify-content-between">
+                                    <td>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={newTopping.name || ''}
+                                        onChange={(e) =>
+                                        setNewTopping({ ...newTopping, name: e.target.value })
+                                        }
+                                        placeholder="Topping Name"
+                                    />
+                                    </td>
+                                    <td>
+                                    <input
+                                        type="number"
+                                        name="price"
+                                        value={newTopping.price || ''}
+                                        onChange={(e) => {
+                                        const value = e.target.value;
+                                        
+                                        const regex = /^\d+(\.\d{0,2})?$/; //REGEX TO ALLOW 2 DECIMAL PLACES
+                                        if (regex.test(value) || value === '') {
+                                            setNewTopping({ ...newTopping, price: parseFloat(value) });
+                                        }
+                                        }}
+                                        placeholder="Price"
+                                        step="0.01" //STEP TO ALLOW 2 DECIMAL PLACES
+                                    />
+                                    </td>
+                                    <td>
+                                    <button onClick={handleSaveNewTopping}>Save</button>
+                                    <button onClick={handleCancelNewTopping}>Cancel</button>
+                                    </td>
+                                    <td></td>
+                                </tr>
                                 )}
 
                                 {/* Toppings List */}
                                 {toppings.map((topping, index) => (
-                                    <tr key={index} className="d-flex justify-content-between">
-                                        <td>
-                                            {editingToppingIndex === index ? (
-                                                <input
-                                                    type="text"
-                                                    name="name"
-                                                    value={editedTopping.name || ''}
-                                                    onChange={(e) => setEditedTopping({ ...editedTopping, name: e.target.value })}
-                                                />
-                                            ) : (
-                                                topping.name
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editingToppingIndex === index ? (
-                                                <input
-                                                    type="number"
-                                                    name="price"
-                                                    value={editedTopping.price || ''}
-                                                    onChange={(e) => setEditedTopping({ ...editedTopping, price: parseFloat(e.target.value) })}
-                                                />
-                                            ) : (
-                                                `$${topping.price}`
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editingToppingIndex === index ? (
-                                                <div>
-                                                    <button onClick={handleToppingSave}>Save</button>
-                                                    <button onClick={() => setEditingToppingIndex(null)}>Cancel</button>
-                                                </div>
-                                            ) : (
-                                                <button onClick={() => handleToppingEdit(topping, index)}>Edit</button>
-                                            )}
-                                        </td>
-                                        <td>
-                                            <button
-                                                onClick={() => {
-                                                    if (window.confirm('Are you sure you want to delete this topping?')) {
-                                                        deleteTopping(topping);
-                                                    }
-                                                }}
-                                            >
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
+                                <tr key={index} className="d-flex justify-content-between">
+                                    <td>
+                                    {editingToppingIndex === index ? (
+                                        <input
+                                        type="text"
+                                        name="name"
+                                        value={editedTopping.name || ''}
+                                        onChange={(e) =>
+                                            setEditedTopping({ ...editedTopping, name: e.target.value })
+                                        }
+                                        />
+                                    ) : (
+                                        topping.name
+                                    )}
+                                    </td>
+                                    <td>
+                                    {editingToppingIndex === index ? (
+                                        <input
+                                        type="number"
+                                        name="price"
+                                        value={editedTopping.price || ''}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+
+                                            const regex = /^\d+(\.\d{0,2})?$/; //REGEX TO ALLOW 2 DECIMAL PLACES
+                                            if (regex.test(value) || value === '') {
+                                            setEditedTopping({ ...editedTopping, price: parseFloat(value) });
+                                            }
+                                        }}
+                                        placeholder='Price'
+                                        step="0.01" //STEP TO ALLOW 2 DECIMAL PLACES
+                                        />
+                                    ) : (
+                                        `$${topping.price}`
+                                    )}
+                                    </td>
+                                    <td>
+                                    {editingToppingIndex === index ? (
+                                        <div>
+                                        <button onClick={handleToppingSave}>Save</button>
+                                        <button onClick={() => setEditingToppingIndex(null)}>Cancel</button>
+                                        </div>
+                                    ) : (
+                                        <button onClick={() => handleToppingEdit(topping, index)}>
+                                        Edit
+                                        </button>
+                                    )}
+                                    </td>
+                                    <td>
+                                    <button
+                                        onClick={() => {
+                                        if (window.confirm('Are you sure you want to delete this topping?')) {
+                                            deleteTopping(topping);
+                                        }
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                    </td>
+                                </tr>
                                 ))}
                             </tbody>
                         </table>
