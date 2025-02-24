@@ -472,8 +472,8 @@ export default function Home() {
                                 ))}
                                 </td>
                                 <td>
-                                <button onClick={handleSaveNewPizza}>Save</button>
-                                <button onClick={handleCancelNewPizza}>Cancel</button>
+                                <button className='saveButton' onClick={handleSaveNewPizza}>Save</button>
+                                <button className='cancelButton' onClick={handleCancelNewPizza}>Cancel</button>
                                 </td>
                                 <td></td>
                             </tr>
@@ -621,8 +621,8 @@ export default function Home() {
                                     />
                                     </td>
                                     <td>
-                                    <button onClick={handleSaveNewTopping}>Save</button>
-                                    <button onClick={handleCancelNewTopping}>Cancel</button>
+                                        <button className='saveButton' onClick={handleSaveNewTopping}>Save</button>
+                                        <button className='cancelButton' onClick={handleCancelNewTopping}>Cancel</button>
                                     </td>
                                     <td></td>
                                 </tr>
@@ -669,8 +669,8 @@ export default function Home() {
                                     <td style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     {editingToppingIndex === index ? (
                                         <div>
-                                        <button onClick={handleToppingSave}>Save</button>
-                                        <button onClick={() => setEditingToppingIndex(null)}>Cancel</button>
+                                            <button className='saveButton' onClick={handleToppingSave}>Save</button>
+                                            <button className='cancelButton' onClick={() => setEditingToppingIndex(null)}>Cancel</button>
                                         </div>
                                     ) : (
                                         <button onClick={() => handleToppingEdit(topping, index)} className='editButton'>
