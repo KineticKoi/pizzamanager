@@ -4,7 +4,7 @@ import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
-    const devMode = true; //SET TO TRUE TO USE LOCALHOST, FALSE TO USE SERVER (THIS WOULD NORMALLY BE IN A .ENV FILE)
+    const devMode = false; //SET TO TRUE TO USE LOCALHOST, FALSE TO USE SERVER (THIS WOULD NORMALLY BE IN A .ENV FILE)
     const base_url = devMode ? 'http://localhost:5000' : 'http://3.149.249.254:5000'; //BASE URL FOR API (THESE WOULD NORMALLY BE IN A .ENV FILE)
     const [loading, setLoading] = useState(true);
     const [userType, setUserType] = useState(null);

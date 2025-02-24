@@ -8,7 +8,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
-    const devMode = true; //SET TO TRUE TO USE LOCALHOST, FALSE TO USE SERVER (THESE WOULD NORMALLY BE IN A .ENV FILE)
+    const devMode = false; //SET TO TRUE TO USE LOCALHOST, FALSE TO USE SERVER (THESE WOULD NORMALLY BE IN A .ENV FILE)
     const base_url = devMode ? 'http://localhost:5000' : 'http://3.149.249.254:5000'; //BASE URL FOR API (THESE WOULD NORMALLY BE IN A .ENV FILE)
 
     const handleSubmit = async (e) => {
