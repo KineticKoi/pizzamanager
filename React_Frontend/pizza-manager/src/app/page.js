@@ -410,7 +410,7 @@ export default function Home() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h2>Pizzas</h2>
                     <button className="sml-btn" onClick={handleCreateNewPizza}>
-                        <i className="bi bi-pencil"></i>
+                        <i class="bi bi-plus-lg"></i>
                     </button>
                 </div>
 
@@ -423,7 +423,6 @@ export default function Home() {
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Toppings</th>
-                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -513,7 +512,7 @@ export default function Home() {
                                     `$${pizza.price}`
                                 )}
                                 </td>
-                                <td>
+                                <td style={{ minWidth: '200px' }}>
                                 {editingPizzaIndex === index ? (
                                     toppings.map((topping) => (
                                     <div key={topping.id} className="form-check">
@@ -537,25 +536,25 @@ export default function Home() {
                                     .join(', ')
                                 )}
                                 </td>
-                                <td>
+                                <td style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 {editingPizzaIndex === index ? (
                                     <>
-                                    <button onClick={handlePizzaSave}>Save</button>
-                                    <button onClick={handlePizzaEditCancel}>Cancel</button>
+                                    <button className='saveButton' onClick={handlePizzaSave}>Save</button>
+                                    <button className='cancelButton' onClick={handlePizzaEditCancel}>Cancel</button>
                                     </>
                                 ) : (
-                                    <button onClick={() => handlePizzaEdit(pizza, index)}>Edit</button>
+                                    <button onClick={() => handlePizzaEdit(pizza, index)} className='editButton' style={{ marginRight: '10px' }}>
+                                        <i className="bi bi-pencil"></i>
+                                    </button>
                                 )}
-                                </td>
-                                <td>
                                 <button
                                     onClick={() => {
-                                    if (window.confirm('Are you sure you want to delete this pizza?')) {
-                                        deletePizza(pizza);
-                                    }
+                                        if (window.confirm('Are you sure you want to delete this pizza?')) {
+                                            deletePizza(pizza);
+                                        }
                                     }}
-                                >
-                                    Delete
+                                    className='deleteButton'>
+                                    <i class="bi bi-trash3-fill"></i>
                                 </button>
                                 </td>
                             </tr>
@@ -574,7 +573,7 @@ export default function Home() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h2>Toppings</h2>
                         <button className="sml-btn" onClick={handleCreateNewTopping}>
-                            <i className="bi bi-pencil"></i>
+                            <i class="bi bi-plus-lg"></i>
                         </button>
                     </div>
 
@@ -586,7 +585,6 @@ export default function Home() {
                                 <tr>
                                     <th>Name</th>
                                     <th>Price</th>
-                                    <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -668,27 +666,26 @@ export default function Home() {
                                         `$${topping.price}`
                                     )}
                                     </td>
-                                    <td>
+                                    <td style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     {editingToppingIndex === index ? (
                                         <div>
                                         <button onClick={handleToppingSave}>Save</button>
                                         <button onClick={() => setEditingToppingIndex(null)}>Cancel</button>
                                         </div>
                                     ) : (
-                                        <button onClick={() => handleToppingEdit(topping, index)}>
-                                        Edit
+                                        <button onClick={() => handleToppingEdit(topping, index)} className='editButton'>
+                                            <i className="bi bi-pencil"></i>
                                         </button>
                                     )}
-                                    </td>
-                                    <td>
                                     <button
                                         onClick={() => {
-                                        if (window.confirm('Are you sure you want to delete this topping?')) {
-                                            deleteTopping(topping);
-                                        }
+                                            if (window.confirm('Are you sure you want to delete this topping?')) {
+                                                deleteTopping(topping);
+                                            }
                                         }}
-                                    >
-                                        Delete
+                                        className='deleteButton'
+                                        style={{ marginLeft: '10px' }}>
+                                        <i class="bi bi-trash3-fill"></i>
                                     </button>
                                     </td>
                                 </tr>

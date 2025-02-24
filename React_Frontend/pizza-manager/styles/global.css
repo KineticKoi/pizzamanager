@@ -15,6 +15,59 @@ h1 {
     color: #333;
     margin-bottom: 40px;
 }
+button {
+    cursor: pointer;
+}
+button:hover {
+    background-color: #ff4d3d;
+}
+.editButton {
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.deleteButton {
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.saveButton {
+    background-color: #49E048;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.saveButton:hover {
+    background-color: green;
+}
+.cancelButton {
+    background-color: #ff474c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+}
+.cancelButton:hover {
+    background-color: darkred;
+}
 .button-row {
     display: flex;
     justify-content: center;
